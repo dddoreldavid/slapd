@@ -3,7 +3,7 @@ import ldap.modlist as modlist
 username='cn=admin,dc=ldap,dc=com'
 password='admin'
 ldap_url='ldap://10.0.0.16:389'
-client_name='ddd'
+client_name='admin'
 
 """create, search, delete"""
 class my_ldap(object):
