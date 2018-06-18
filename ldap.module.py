@@ -44,11 +44,12 @@ class my_ldap(object):
             print e 
             
     def create(self, dn):
-        #attributes of the new cn in ou = Lio:
-        #dn = "junior=Lio,dc=ldap,dc=com"
+        #Values in the atmosphere of the Mondial
+        #attributes of the new ou = Lio:
+        #dn = "ou=Lio,dc=ldap,dc=com"
         attrs = {}
         attrs["objectclass"]=["top", "organizationalRole", "simpleSecurityObject"]
-        attrs["cn"] = "Tiago"
+        attrs["cn"] = "Argentina"
         attrs["userPassword"] = password
        
         #add_s function accept modlist type. this function changing dictionary to  mod list
@@ -57,14 +58,7 @@ class my_ldap(object):
         try:
         #adding to the ldap 
             self.ldap_server.add_s(dn,ldif)
-            print 'User added'
-        except Exception, e:
-            print e #cannot connect to server or user is not exist
-
-        try:
-        #adding to the ldap 
-            self.ldap_server.add_s(dn,ldif)
-            print 'User added'
+            print 'Ou/User added'
         except Exception, e:
             print e #cannot connect to server or user is not exist
     
