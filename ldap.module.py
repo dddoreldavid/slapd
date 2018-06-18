@@ -44,17 +44,22 @@ class my_ldap(object):
             print e 
             
     def create(self, dn):
-
-        #attributes of the new user:
-        """dn: cn=new_user,cn=sales_group,ou=sales,cn=admin,dc=ldap,dc=com"""
+        #attributes of the new cn in ou = Lio:
+        #dn = "junior=Lio,dc=ldap,dc=com"
         attrs = {}
-        attrs['cn']='user_two'
-        attrs['gidNumber'] = '500'
-        attrs['homeDirectory'] = '/home/users/user_two'
-        attrs['objectClass'] = ['inetOrgPerson','posixAccount','top']
-        attrs['sn'] = 'ddd'
+        attrs["objectclass"]=["top", "organizationalRole", "simpleSecurityObject"]
+        attrs["cn"] = "Tiago"
+        attrs["userPassword"] = password
+       
         #add_s function accept modlist type. this function changing dictionary to  mod list
         ldif = modlist.addModlist(attrs)
+
+        try:
+        #adding to the ldap 
+            self.ldap_server.add_s(dn,ldif)
+            print 'User added'
+        except Exception, e:
+            print e #cannot connect to server or user is not exist
 
         try:
         #adding to the ldap 
