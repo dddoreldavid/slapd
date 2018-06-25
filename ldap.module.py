@@ -1,5 +1,6 @@
 import ldap
 import ldap.modlist as modlist
+from getpass import getpass
 username = 'cn=admin,dc=ldap,dc=com'
 password = getpass()
 IP = raw_input("Enter a ip address of ldap server (slapd): ")
