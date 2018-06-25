@@ -1,78 +1,85 @@
 import ldap
 import ldap.modlist as modlist
-username='cn=admin,dc=ldap,dc=com'
-password='admin'
-ldap_url='ldap://10.0.0.16:389'
-client_name='admin'
+username = 'cn=admin,dc=ldap,dc=com'
+getpass = raw_input('enter a password please: ')
+IP = raw_input("Enter a ip address of ldap server (slapd): ")
+ldap_url = 'ldap://'+IP+':389'
+dn = 'dc=ldap,dc=com'
 
-"""create, search, delete"""
 class my_ldap(object):
-    """initialize connection to server"""
+    """Create, search, delete"""
     def __init__(self, ldap_url):
+        """Initialize connection to server"""
         self.ldap_server = ldap.initialize(ldap_url)
     
-    """login to server""" 
+    
     def login(self, username, password):
+        """login to server""" 
         return self.ldap_server.simple_bind_s(username, password)    
 
- 
-#cn is an attribute in which we search in the value client_name
-#[] is the result attribute that I want to see
-#I want to see all the attributes and their values of 'cn'
-    def finds_attrs(self, dn):
+    
+    def search(self, dn):       
+        """Searching"""
+        #dn = Search path
+        client_name = raw_input('enter a client name that you want to search : ')
         try:
-            lis_attr = self.ldap_server.search_s(dn,
+            result = self.ldap_server.search_s(dn,
                                       ldap.SCOPE_SUBTREE,
-                                      'cn='+client_name,
-                                      [])
-            return lis_attr
-        except Exception ,e:
-            print e 
-
-    def search(self, dc, client_name):
-        #searching"""
-        try:
-            result = self.ldap_server.search_s(dc,
-                                      ldap.SCOPE_SUBTREE,
-                                      'cn='+client_name,
-                                      ['audio'])
-            #cn is an attribute in which we search in the value client_name
-            #audio of is the result attribute that I want to see
+                                      'cn='+client_name, #Cn is an attribute in which we search in the value client_name
+                                      )
             return result
 
         except Exception ,e:
             print e 
             
-    def create(self, dn):
-        #Values in the atmosphere of the Mondial
-        #attributes of the new ou = Lio:
-        #dn = "ou=Lio,dc=ldap,dc=com"
+    def create(self):
+        """Create object"""
+        dn_object = raw_input('Enter the dn that you want to add: ') #New dn, parent folder should be set
+        """
+        Example:
+        Values in the atmosphere of the Mondial
+        Attributes of the new ou = Lio
+        dn_object = "ou=Lio,dc=ldap,dc=com"
+        """
         attrs = {}
         attrs["objectclass"]=["top", "organizationalRole", "simpleSecurityObject"]
         attrs["cn"] = "Argentina"
-        attrs["userPassword"] = password
+        attrs["userPassword"] = getpass
        
-        #add_s function accept modlist type. this function changing dictionary to  mod list
-        ldif = modlist.addModlist(attrs)
-
+        ldif = modlist.addModlist(attrs) #This function changing dictionary to  mod list
+        
         try:
-        #adding to the ldap 
-            self.ldap_server.add_s(dn,ldif)
+            self.ldap_server.add_s(dn_object,ldif) #Add_s function adding to the ldap 
             print 'Ou/User added'
         except Exception, e:
-            print e #cannot connect to server or user is not exist
+            print e #Cannot connect to server or user is not exist
     
-    """ delete dn"""
+    def create_user(self):
+        """create user """
+        dn_user = raw_input('Enter the dn that you want to add: ')
+        """
+        Example: Add user to Lio object
+        dn_user = "cn=Messi,ou=Lio,dc=ldap,dc=com"
+        """
+        attrs = {}
+        attrs["objectclass"]=["top", "posixGroup"]
+        attrs["gidNumber"] =  raw_input("Enter a gidNumber: ")
+        attrs["cn"] = "Argentina"
+        attrs["userPassword"] = raw_input("Enter a user password: ")
+        ldif = modlist.addModlist(attrs)
+        self.ldap_server.add_s(dn_user, ldif)
+
     def delete_dn(self, dn):
+        """Delete dn"""
         try:
-            self.ldap_server.delete_s(dn)
+            self.ldap_server.delete_s(dn) #dn = Path to delete
             print 'User deleted'
         except Exception, e:
-            print e #cannot connect to server or user is not exist
+            print e #Cannot connect to server or user is not exist
                     
            
     def close(self):
-            #closing the connection to the server
+        """Closing the connection to the server"""
         try:
             self.ldap_server.unbind_s()
         except Exception ,e:
