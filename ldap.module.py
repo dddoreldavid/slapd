@@ -30,7 +30,7 @@ class my_ldap(object):
                                       )
             return result
 
-        except Exception ,e:
+        except ldap.LDAPError ,e:
             print e 
             
     def create(self):
@@ -52,7 +52,7 @@ class my_ldap(object):
         try:
             self.ldap_server.add_s(dn_object,ldif) #Add_s function adding to the ldap 
             print 'Ou/User added'
-        except Exception, e:
+        except ldap.LDAPError, e:
             print e #Cannot connect to server or user is not exist
     
     def create_user(self):
@@ -75,7 +75,7 @@ class my_ldap(object):
         try:
             self.ldap_server.delete_s(dn) #dn = Path to delete
             print 'User deleted'
-        except Exception, e:
+        except ldap.LDAPError, e:
             print e #Cannot connect to server or user is not exist
                     
            
@@ -83,5 +83,5 @@ class my_ldap(object):
         """Closing the connection to the server"""
         try:
             self.ldap_server.unbind_s()
-        except Exception ,e:
+        except ldap.LDAPError ,e:
             print e
