@@ -1,0 +1,4 @@
+---
+- hosts: ldapserver
+  roles:
+    - slapd
