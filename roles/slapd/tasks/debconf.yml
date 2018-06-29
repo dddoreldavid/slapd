@@ -1,0 +1,27 @@
+---
+- name: debconf for slapd
+  debconf:
+    name: slapd
+    question: "{{ item.question }}"
+    value: "{{ item.value }}"
+    vtype: "{{ item.vtype }}"
+  with_items:
+    - { question: 'internal/adminpw', value: admin, vtype: password }
+    - { question: 'internal/generated_adminpw', value: admin, vtype: password }   
+    - { question: 'slapd/password1', value: admin, vtype: password }
+    - { question: 'slapd/password2', value: admin, vtype: password }
+    - { question: 'internal/adminpw', value: admin, vtype: password }
+- name: debconf for ldap-utils
+  debconf:
+    name: ldap-utils
+    question: "{{ item.question }}"
+    value: "{{ item.value }}"
+    vtype: "{{ item.vtype }}"
+  with_items:
+    - { question: slapd/purge_database, value: false, vtype: boolean }
+    - { question: slapd/slapd/domain, value: ldap.com, vtype: string }
+    - { question: slapd/slapd/invaild_config, value: true, vtype: boolean }
+    - { question: slapd/move_old_database, value: true, vtype: boolean }
+    - { question: slapd/slapd/backend, value: MDB, vtype: select }
+    - { question: slapd/allow_ldap_v2, value: false, vtype: boolean }
+    - { question: slapd/no_configuration, value: false, vtype: boolean }
