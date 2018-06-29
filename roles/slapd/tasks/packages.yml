@@ -1,0 +1,27 @@
+---
+- name: install slapd
+  apt:
+    update_cache: yes
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - slapd
+    - ldap-utils
+    - phpldapadmin
+
+- name: Pass options to dpkg on run
+  dpkg_selections:
+    name: slapd
+    selection: hold
+
+- name: edit ldap.conf
+  lineinfile:
+    path: /etc/ldap/ldap.conf
+    line: '{{ item }}'
+    owner: root
+    group: root
+    state: present
+    mode: 0644
+  with_items:
+    - 'BASE  dc=ldap,dc=com'
+    - 'URI  ldap://localhost:389'
