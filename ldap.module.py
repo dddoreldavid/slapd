@@ -45,7 +45,7 @@ class my_ldap(object):
         attrs = {}
         attrs["objectclass"]=["top", "organizationalRole", "simpleSecurityObject"]
         attrs["cn"] = "Argentina"
-        attrs["userPassword"] = getpass
+        attrs["userPassword"] = password
        
         ldif = modlist.addModlist(attrs) #This function changing dictionary to  mod list
         
