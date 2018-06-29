@@ -1,0 +1,4 @@
+---
+- include: debconf.yml
+- include: packages.yml
+- include: edit_ldap_conf.yml
