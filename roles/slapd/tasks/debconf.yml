@@ -10,7 +10,6 @@
     - { question: 'internal/generated_adminpw', value: admin, vtype: password }   
     - { question: 'slapd/password1', value: admin, vtype: password }
     - { question: 'slapd/password2', value: admin, vtype: password }
-    - { question: 'internal/adminpw', value: admin, vtype: password }
 - name: debconf for ldap-utils
   debconf:
     name: ldap-utils
